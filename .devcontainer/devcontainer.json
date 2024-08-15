@@ -1,0 +1,23 @@
+{
+    "name": "labs",
+    "image": "mcr.microsoft.com/devcontainers/typescript-node:bookworm",
+    "forwardPorts": [
+        3000
+    ],
+    "postCreateCommand": "npm install && npm install -g @nestjs/cli",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "christian-kohler.npm-intellisense",
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "xabikos.JavaScriptSnippets"
+            ],
+            "settings": {
+                "[typescript]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                }
+            }
+        }
+    }
+}
