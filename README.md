@@ -3,7 +3,7 @@
 > [!NOTE]
 >
 > Esse repositório contém nossa submissão ao desafio do Ramp Up do 42 Labs
-> em parceria com a [SoulLoop]()
+> em parceria com a [SoulLoop](https://soulloop.com/)
 
 ## Autores
 
