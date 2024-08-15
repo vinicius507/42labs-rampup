@@ -8,31 +8,32 @@ import {
   Put,
 } from "@nestjs/common";
 import { TasksService } from "./tasks.service";
+import { TaskStatus } from "./task.interface";
 
 @Controller("tasks")
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @Get() //GET /tasks
+  @Get()
   readTasks() {
     return this.tasksService.readTasks();
   }
 
-  @Post() //POST /tasks
-  createTask(@Body() task: { title: string; body: string }) {
-    return this.tasksService.createTask(task);
+  @Post()
+  createTask(@Body("title") title: string) {
+    return this.tasksService.createTask(title);
   }
 
-  @Put(":id") //PUT /tasks/:id
+  @Put(":id")
   updateTask(
     @Param("id") id: string,
-    @Body() updatedTask: { title: string; body: string }
+    @Body() updatedTask: { title: string; status: TaskStatus }
   ) {
-    return this.tasksService.updateTask(+id, updatedTask);
+    return this.tasksService.updateTask(id, updatedTask);
   }
 
-  @Delete(":id") //DELETE /tasks/:id
+  @Delete(":id")
   deleteTask(@Param("id") id: string) {
-    return this.tasksService.deleteTask(+id);
+    return this.tasksService.deleteTask(id);
   }
 }

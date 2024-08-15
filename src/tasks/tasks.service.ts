@@ -1,52 +1,56 @@
 import { Injectable } from "@nestjs/common";
+import { Task } from "./task.interface";
 
 @Injectable()
 export class TasksService {
-  private tasks = [
+  private tasks: Task[] = [
     {
-      id: 1,
+      id: "1",
       title: "Task 1",
-      body: "Aprender NestJS",
+      status: "open",
     },
     {
-      id: 2,
+      id: "2",
       title: "Task 2",
-      body: "Blablabla",
+      status: "open",
     },
     {
-      id: 3,
+      id: "3",
       title: "Task 3",
-      body: "Lalalalala",
+      status: "open",
     },
   ];
 
-  readTasks() {
+  readTasks(): Task[] {
     return this.tasks;
   }
 
-  createTask(task: { title: string; body: string }) {
-    const newTask = {
-      id: this.tasks.length + 1,
-      ...task,
+  createTask(title: string): Task {
+    const newTask: Task = {
+      id: (this.tasks.length + 1).toString(),
+      title,
+      status: "open",
     };
+
     this.tasks.push(newTask);
+
     return newTask;
   }
 
-  updateTask(id: number, updatedTask: { title?: string; body?: string }) {
-    this.tasks = this.tasks.map((task) => {
-      if (task.id === id) {
-        return { ...task, ...updatedTask };
-      }
-      return task;
-    });
+  updateTask(id: string, updatedTask: Omit<Task, "id">): Task | null {
+    const taskIndex = this.tasks.findIndex((task) => task.id === id);
 
-    return this.readTasks();
+    if (taskIndex === -1) {
+      return null;
+    }
+    this.tasks[taskIndex] = {
+      ...this.tasks[taskIndex],
+      ...updatedTask,
+    };
+    return this.tasks[taskIndex];
   }
 
-  deleteTask(id: number) {
+  deleteTask(id: string): void {
     this.tasks = this.tasks.filter((task) => task.id !== id);
-
-    return this.readTasks();
   }
 }
