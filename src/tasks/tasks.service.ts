@@ -1,21 +1,22 @@
 import { Injectable } from "@nestjs/common";
 import { Task } from "./task.interface";
+import { randomUUID } from "node:crypto";
 
 @Injectable()
 export class TasksService {
   private tasks: Task[] = [
     {
-      id: "1",
+      id: randomUUID(),
       title: "Task 1",
       status: "open",
     },
     {
-      id: "2",
+      id: randomUUID(),
       title: "Task 2",
       status: "open",
     },
     {
-      id: "3",
+      id: randomUUID(),
       title: "Task 3",
       status: "open",
     },
@@ -27,7 +28,7 @@ export class TasksService {
 
   createTask(title: string): Task {
     const newTask: Task = {
-      id: (this.tasks.length + 1).toString(),
+      id: randomUUID(),
       title,
       status: "open",
     };
