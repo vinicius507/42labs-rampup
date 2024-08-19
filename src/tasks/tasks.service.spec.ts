@@ -66,7 +66,7 @@ describe("TasksService", () => {
   });
 
   it("should delete a task", () => {
-    const result = service.deleteTask("2");
+    const result = service.deleteTask("5fc71e98-8f00-430b-864e-d3e2d7f76f5d");
 
     expect(result).toBe(undefined);
   });

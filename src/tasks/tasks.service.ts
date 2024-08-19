@@ -1,57 +1,50 @@
 import { Injectable } from "@nestjs/common";
 import { Task } from "./task.interface";
-import { randomUUID } from "node:crypto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { TaskEntity } from "./tasks.entity";
+import { Repository } from "typeorm";
+import type { UUID } from "node:crypto";
 
 @Injectable()
 export class TasksService {
-  private tasks: Task[] = [
-    {
-      id: "5fc71e98-8f00-430b-864e-d3e2d7f76f5d",
-      title: "Task 1",
-      status: "open",
-    },
-    {
-      id: "917434e7-d183-4427-a164-03c0318340b6",
-      title: "Task 2",
-      status: "open",
-    },
-    {
-      id: "a36cb0bd-7c0d-4f0e-9237-e422af3e2a3f",
-      title: "Task 3",
-      status: "open",
-    },
-  ];
+  constructor(
+    @InjectRepository(TaskEntity)
+    private tasksRepository: Repository<TaskEntity>
+  ) {}
 
-  readTasks(): Task[] {
-    return this.tasks;
+  async readTasks(): Promise<Task[]> {
+    return await this.tasksRepository.find();
   }
 
-  createTask(title: string): Task {
-    const newTask: Task = {
-      id: randomUUID(),
+  async createTask(title: string): Promise<Task> {
+    return await this.tasksRepository.save({
       title,
       status: "open",
-    };
-
-    this.tasks.push(newTask);
-
-    return newTask;
+    });
   }
 
-  updateTask(id: string, updatedTask: Omit<Task, "id">): Task | null {
-    const taskIndex = this.tasks.findIndex((task) => task.id === id);
+  async updateTask(
+    id: UUID,
+    updatedTask: Omit<Task, "id">
+  ): Promise<Task | null> {
+    const task = await this.tasksRepository.findOneBy({ id });
 
-    if (taskIndex === -1) {
+    if (!task) {
       return null;
     }
-    this.tasks[taskIndex] = {
-      ...this.tasks[taskIndex],
-      ...updatedTask,
-    };
-    return this.tasks[taskIndex];
+
+    const result = await this.tasksRepository
+      .createQueryBuilder()
+      .update()
+      .set(updatedTask)
+      .where("id = :id", { id })
+      .returning("*")
+      .execute();
+
+    return result.generatedMaps[0] as Task;
   }
 
-  deleteTask(id: string): void {
-    this.tasks = this.tasks.filter((task) => task.id !== id);
+  async deleteTask(id: UUID): Promise<void> {
+    await this.tasksRepository.delete(id);
   }
 }

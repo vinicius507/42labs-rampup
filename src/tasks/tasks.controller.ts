@@ -8,6 +8,7 @@ import {
   Post,
   Put,
 } from "@nestjs/common";
+import type { UUID } from "node:crypto";
 import { TasksService } from "./tasks.service";
 import { CreateTaskDTO, UpdateTaskDTO } from "./dto";
 
@@ -27,14 +28,14 @@ export class TasksController {
 
   @Put(":id")
   updateTask(
-    @Param("id", ParseUUIDPipe) id: string,
+    @Param("id", ParseUUIDPipe) id: UUID,
     @Body() updatedTask: UpdateTaskDTO
   ) {
     return this.tasksService.updateTask(id, updatedTask);
   }
 
   @Delete(":id")
-  deleteTask(@Param("id", ParseUUIDPipe) id: string) {
+  deleteTask(@Param("id", ParseUUIDPipe) id: UUID) {
     return this.tasksService.deleteTask(id);
   }
 }

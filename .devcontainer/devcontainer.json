@@ -6,6 +6,13 @@
   "workspaceFolder": "/workspaces/rampup",
   "forwardPorts": [3000, 5432],
   "postCreateCommand": "npm install && npm install -g @nestjs/cli",
+  "remoteEnv": {
+    "DB_HOST": "db",
+    "DB_PORT": "5432",
+    "DB_NAME": "rampup",
+    "DB_USERNAME": "rampup",
+    "DB_PASSWORD": "password"
+  },
   "customizations": {
     "vscode": {
       "extensions": [
