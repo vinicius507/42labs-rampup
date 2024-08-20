@@ -1,36 +1,49 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import type { Task } from "./task.interface";
+import { TestBed } from "@automock/jest";
+import { Repository } from "typeorm";
 import { TasksService } from "./tasks.service";
+import { Task } from "./task.interface";
+import { TaskEntity } from "./tasks.entity";
+import { getRepositoryToken } from "@nestjs/typeorm";
 
 describe("TasksService", () => {
   let service: TasksService;
+  let repository: jest.Mocked<Repository<TaskEntity>>;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [TasksService],
-    }).compile();
+    const { unit, unitRef } = TestBed.create(TasksService).compile();
 
-    service = module.get<TasksService>(TasksService);
+    service = unit;
+    repository = unitRef.get(getRepositoryToken(TaskEntity) as string);
   });
 
   it("should be defined", () => {
     expect(service).toBeDefined();
   });
 
-  it("should create a task", () => {
+  it("should create a task", async () => {
     const taskTitle = "Task 1";
-    const expectedTask = {
+    const expectedTask: Task = {
+      id: "5fc71e98-8f00-430b-864e-d3e2d7f76f5d",
       title: taskTitle,
       status: "open",
     };
+    repository.save.mockImplementationOnce(async ({ title, status }) => ({
+      id: expectedTask.id,
+      title,
+      status,
+    }));
 
-    const result = service.createTask(taskTitle);
+    const result = await service.createTask(taskTitle);
 
-    expect(result).toEqual({ id: expect.any(String), ...expectedTask });
+    expect(result).toEqual(expectedTask);
+    expect(repository.save).toHaveBeenCalledWith({
+      title: taskTitle,
+      status: "open",
+    });
   });
 
-  it("should return all tasks", () => {
-    const expectedTasks = [
+  it("should return all tasks", async () => {
+    const expectedTasks: Task[] = [
       {
         id: "5fc71e98-8f00-430b-864e-d3e2d7f76f5d",
         title: "Task 1",
@@ -47,27 +60,47 @@ describe("TasksService", () => {
         status: "open",
       },
     ];
+    repository.find.mockImplementationOnce(async () => expectedTasks);
 
-    const result = service.readTasks();
+    const result = await service.readTasks();
 
     expect(result).toEqual(expectedTasks);
+    expect(repository.find).toHaveBeenCalled();
   });
 
-  it("should update a task", () => {
+  it("should update a task", async () => {
     const taskId = "5fc71e98-8f00-430b-864e-d3e2d7f76f5d";
-    const expectedUpdatedTask: Omit<Task, "id"> = {
+    const expectedUpdatedTask: Task = {
+      id: taskId,
       title: "Task Bla",
       status: "done",
     };
+    repository.findOneBy.mockResolvedValueOnce(expectedUpdatedTask);
+    repository.createQueryBuilder.mockReturnValueOnce({
+      update: jest.fn().mockReturnThis(),
+      set: jest.fn().mockReturnThis(),
+      where: jest.fn().mockReturnThis(),
+      returning: jest.fn().mockReturnThis(),
+      execute: jest.fn().mockResolvedValueOnce({
+        generatedMaps: [expectedUpdatedTask],
+      }),
+    } as any);
 
-    const result = service.updateTask(taskId, expectedUpdatedTask);
+    const result = await service.updateTask(taskId, expectedUpdatedTask);
 
-    expect(result).toEqual({ id: taskId, ...expectedUpdatedTask });
+    expect(result).toEqual(expectedUpdatedTask);
+    expect(repository.findOneBy).toHaveBeenCalledWith({ id: taskId });
+    expect(repository.createQueryBuilder).toHaveBeenCalledWith();
   });
 
-  it("should delete a task", () => {
-    const result = service.deleteTask("5fc71e98-8f00-430b-864e-d3e2d7f76f5d");
+  it("should delete a task", async () => {
+    const taskId = "5fc71e98-8f00-430b-864e-d3e2d7f76f5d";
+
+    repository.delete.mockResolvedValueOnce(undefined);
+
+    const result = await service.deleteTask(taskId);
 
     expect(result).toBe(undefined);
+    expect(repository.delete).toHaveBeenCalledWith(taskId);
   });
 });
