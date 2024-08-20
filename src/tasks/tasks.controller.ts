@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
@@ -35,6 +37,7 @@ export class TasksController {
   }
 
   @Delete(":id")
+  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteTask(@Param("id", ParseUUIDPipe) id: UUID) {
     await this.tasksService.deleteTask(id);
   }
