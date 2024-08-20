@@ -82,7 +82,7 @@ describe("TasksService", () => {
       where: jest.fn().mockReturnThis(),
       returning: jest.fn().mockReturnThis(),
       execute: jest.fn().mockResolvedValueOnce({
-        generatedMaps: [expectedUpdatedTask],
+        raw: [expectedUpdatedTask],
       }),
     } as any);
 

@@ -11,6 +11,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
       username: "rampup",
       password: "password",
       database: "rampup",
+      autoLoadEntities: true,
       synchronize: true,
     }),
     TasksModule,

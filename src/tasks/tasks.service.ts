@@ -41,7 +41,7 @@ export class TasksService {
       .returning("*")
       .execute();
 
-    return result.generatedMaps[0] as Task;
+    return result.raw[0] as Task;
   }
 
   async deleteTask(id: UUID): Promise<void> {
