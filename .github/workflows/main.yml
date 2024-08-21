@@ -26,18 +26,13 @@ jobs:
     runs-on: ubuntu-latest
     container: node:20-bookworm
     needs: [unit-tests]
-    env:
-      DB_HOST: postgres
-      DB_NAME: tasks
-      DB_USER: postgres
-      DB_PASSWORD: password
     services:
-      postgres:
+      db:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: postgres
+          POSTGRES_USER: rampup
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: tasks
+          POSTGRES_DB: rampup
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
