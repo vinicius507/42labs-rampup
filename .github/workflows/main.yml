@@ -26,6 +26,11 @@ jobs:
     runs-on: ubuntu-latest
     container: node:20-bookworm
     needs: [unit-tests]
+    env:
+      DB_HOST: postgres
+      DB_NAME: tasks
+      DB_USER: postgres
+      DB_PASSWORD: password
     services:
       postgres:
         image: postgres:16-alpine
@@ -51,8 +56,3 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm run test:e2e
-        env:
-          DB_HOST: postgres
-          DB_NAME: tasks
-          DB_USER: postgres
-          DB_PASSWORD: password
