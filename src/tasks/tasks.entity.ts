@@ -1,15 +1,15 @@
 import { UUID } from "crypto";
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
-import type { Task, TaskStatus } from "./task.interface";
+import { taskStatuses, type Task, type TaskStatus } from "./task.interface";
 
-@Entity()
+@Entity({ name: "tasks" })
 export class TaskEntity implements Task {
   @PrimaryGeneratedColumn("uuid")
   id: UUID;
 
-  @Column()
+  @Column({ length: 100 })
   title: string;
 
-  @Column()
+  @Column({ type: "enum", enum: taskStatuses, default: "open" })
   status: TaskStatus;
 }

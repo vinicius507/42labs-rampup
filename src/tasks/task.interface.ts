@@ -1,6 +1,8 @@
 import type { UUID } from "node:crypto";
 
-export type TaskStatus = "open" | "in_progress" | "done";
+export const taskStatuses = ["open", "in_progress", "done"] as const;
+
+export type TaskStatus = (typeof taskStatuses)[number];
 
 export interface Task {
   id: UUID;
