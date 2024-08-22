@@ -1,0 +1,12 @@
+.devcontainer/
+.github/
+.git/
+.gitignore
+coverage/
+dist/
+node_modules/
+test/
+*.spec.ts
+.eslintrc.js
+.prettierrc
+README.md
