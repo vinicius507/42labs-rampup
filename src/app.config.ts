@@ -1,23 +1,38 @@
 import { plainToInstance, Type } from "class-transformer";
 import {
-  IsFQDN,
   IsPort,
   IsString,
   IsStrongPassword,
   validateSync,
+  ValidateNested,
+  ValidateIf,
 } from "class-validator";
 
 class DbConfig {
-  @IsFQDN() host: string;
-  @IsPort() port: string;
-  @IsString() database: string;
-  @IsString() username: string;
-  @IsStrongPassword() password: string;
+  @IsString()
+  host: string;
+
+  @IsPort()
+  port: string;
+
+  @IsString()
+  database: string;
+
+  @IsString()
+  username: string;
+
+  @ValidateIf(() => process.env.NODE_ENV === "production")
+  @IsStrongPassword()
+  password: string;
 }
 
 class AppConfig {
-  @IsPort() port: string;
-  @Type(() => DbConfig) database: DbConfig;
+  @IsPort()
+  port: string;
+
+  @Type(() => DbConfig)
+  @ValidateNested()
+  database: DbConfig;
 }
 
 const validateConfig = (config: Record<string, unknown>) => {
