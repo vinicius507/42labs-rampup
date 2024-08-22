@@ -31,9 +31,9 @@ export class TasksController {
   @Put(":id")
   async updateTask(
     @Param("id", ParseUUIDPipe) id: UUID,
-    @Body() updatedTask: UpdateTaskDTO
+    @Body() updateTaskDTO: UpdateTaskDTO
   ) {
-    return await this.tasksService.updateTask(id, updatedTask);
+    return await this.tasksService.updateTask(id, updateTaskDTO);
   }
 
   @Delete(":id")

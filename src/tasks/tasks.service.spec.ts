@@ -4,6 +4,7 @@ import { TasksService } from "./tasks.service";
 import { Task } from "./task.interface";
 import { TaskEntity } from "./tasks.entity";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import { NotFoundException } from "@nestjs/common";
 
 describe("TasksService", () => {
   let service: TasksService;
@@ -68,6 +69,19 @@ describe("TasksService", () => {
     expect(repository.find).toHaveBeenCalled();
   });
 
+  it("should return null when updating a non-existing task", async () => {
+    const taskId = "5fc71e98-8f00-430b-864e-d3e2d7f76f5d";
+    repository.findOneBy.mockResolvedValueOnce(null);
+
+    const result = service.updateTask(taskId, {
+      title: "Task 1",
+      status: "open",
+    });
+
+    expect(result).rejects.toThrow(NotFoundException);
+    expect(repository.findOneBy).toHaveBeenCalledWith({ id: taskId });
+  });
+
   it("should update a task", async () => {
     const taskId = "5fc71e98-8f00-430b-864e-d3e2d7f76f5d";
     const expectedUpdatedTask: Task = {
@@ -95,12 +109,23 @@ describe("TasksService", () => {
 
   it("should delete a task", async () => {
     const taskId = "5fc71e98-8f00-430b-864e-d3e2d7f76f5d";
+    repository.existsBy.mockResolvedValueOnce(false);
 
+    const result = service.deleteTask(taskId);
+
+    expect(result).rejects.toThrow(NotFoundException);
+    expect(repository.existsBy).toHaveBeenCalledWith({ id: taskId });
+  });
+
+  it("should delete a task", async () => {
+    const taskId = "5fc71e98-8f00-430b-864e-d3e2d7f76f5d";
+    repository.existsBy.mockResolvedValueOnce(true);
     repository.delete.mockResolvedValueOnce(undefined);
 
     const result = await service.deleteTask(taskId);
 
     expect(result).toBe(undefined);
+    expect(repository.existsBy).toHaveBeenCalledWith({ id: taskId });
     expect(repository.delete).toHaveBeenCalledWith(taskId);
   });
 });

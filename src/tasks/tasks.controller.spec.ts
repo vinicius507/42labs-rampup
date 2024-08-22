@@ -2,6 +2,7 @@ import { TasksController } from "./tasks.controller";
 import { TasksService } from "./tasks.service";
 import { Task } from "./task.interface";
 import { TestBed } from "@automock/jest";
+import { NotFoundException } from "@nestjs/common";
 
 describe("TasksController", () => {
   let controller: TasksController;
@@ -61,6 +62,22 @@ describe("TasksController", () => {
 
     expect(result).toEqual(expectedTasks);
     expect(service.readTasks).toHaveBeenCalled();
+  });
+
+  it("should return 404 when updating a non-existing task", async () => {
+    const taskId = "71c002ce-5612-446a-a95f-dfb9d3c653de";
+    const updateTaskDTO: Omit<Task, "id"> = {
+      title: "Updated Task",
+      status: "done",
+    };
+    service.updateTask.mockImplementationOnce(async () => {
+      throw new NotFoundException();
+    });
+
+    const result = controller.updateTask(taskId, updateTaskDTO);
+
+    expect(result).rejects.toThrow(NotFoundException);
+    expect(service.updateTask).toHaveBeenCalledWith(taskId, updateTaskDTO);
   });
 
   it("should update a task", async () => {
