@@ -19,6 +19,26 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
 
+  rampup-api:
+    image: rampup-api
+    container_name: rampup-api
+    build: .
+    init: true
+    ports:
+      - "3020:3000"
+    depends_on:
+      db: 
+        condition: service_healthy
+    networks:
+      - rampup
+    secrets:
+      - db_password
+    environment:
+      - DB_NAME
+      - DB_USERNAME
+      - DB_HOST=db
+      - DB_PASSWORD_FILE=/run/secrets/db_password
+
 networks:
   rampup:
     name: rampup-network

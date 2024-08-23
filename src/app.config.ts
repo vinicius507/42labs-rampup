@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import { plainToInstance, Type } from "class-transformer";
 import {
   IsPort,
@@ -49,6 +50,15 @@ const validateConfig = (config: Record<string, unknown>) => {
 };
 
 export default () => {
+  let password: string;
+  const { DB_PASSWORD, DB_PASSWORD_FILE } = process.env;
+
+  if (DB_PASSWORD_FILE) {
+    password = fs.readFileSync(DB_PASSWORD_FILE, "utf-8");
+  } else if (DB_PASSWORD) {
+    password = DB_PASSWORD;
+  }
+
   const config = {
     port: process.env.PORT || "3000",
     database: {
@@ -56,7 +66,7 @@ export default () => {
       port: process.env.DB_PORT || "5432",
       database: process.env.DB_NAME,
       username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
+      password,
     },
   };
 
