@@ -61,6 +61,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: vinicius507/rampup
+          flavor: |
+            latest=true
           tags: |
             type=ref,event=branch
             type=ref,event=pr
