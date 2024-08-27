@@ -110,4 +110,4 @@ jobs:
             DB_NAME=${{ vars.DB_NAME }}
             DB_USERNAME=${{ vars.DB_USERNAME }}
             DB_PASSWORD_FILE=/run/secrets/db_password
-            /run/secrets/db_password=${{ secrets.DB_PASSWORD }}
+            /run/secrets/db_password:latest=${{ secrets.DB_PASSWORD }}
