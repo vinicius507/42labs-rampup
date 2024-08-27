@@ -100,10 +100,11 @@ jobs:
         name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          flags: >-
-            --add-cloudsql-instances=${{ secrets.GCP_CLOUDSQL_INSTANCE }}
           service: rampup-api
           image: vinicius507/rampup
+          region: southamerica-east1
+          flags: >-
+            --add-cloudsql-instances=${{ secrets.GCP_CLOUDSQL_INSTANCE }}
           secrets: |-
             DB_HOST=/cloudsql/${{ secrets.GCP_CLOUDSQL_INSTANCE }}
             DB_NAME=${{ vars.DB_NAME }}
