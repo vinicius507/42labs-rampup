@@ -14,11 +14,12 @@ import {
 import type { UUID } from "node:crypto";
 import { TasksService } from "./tasks.service";
 import { CreateTaskDTO, TaskDTO, UpdateTaskDTO } from "./dto";
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../auth/auth.guard";
 
-@UseGuards(AuthGuard)
+@ApiBearerAuth()
 @ApiTags("tasks")
+@UseGuards(AuthGuard)
 @Controller("tasks")
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}

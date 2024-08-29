@@ -11,6 +11,7 @@ function setupSwagger(app: NestExpressApplication) {
     .setDescription("42 Labs Ramp Up project for Soulloop.")
     .setVersion("1.0")
     .addTag("tasks")
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
