@@ -80,10 +80,19 @@
     ],
     "coverageDirectory": "../coverage",
     "coveragePathIgnorePatterns": [
+      ".*.guard.ts",
       ".*.module.ts",
       "app.config.ts",
       "main.ts"
     ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    },
     "testEnvironment": "node"
   }
 }
