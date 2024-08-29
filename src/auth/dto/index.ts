@@ -1,2 +1,2 @@
 export { AccessTokenDTO } from "./access-token.dto";
-export { SignInDTO } from "./sign-in.dto";
+export { CredentialsDTO } from "./credentials.dto";

@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
-import { AccessTokenDTO, SignInDTO } from "./dto";
+import { AccessTokenDTO, CredentialsDTO } from "./dto";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -19,7 +19,12 @@ export class AuthController {
   })
   @Post("login")
   @HttpCode(HttpStatus.OK)
-  signIn(@Body() signInDto: SignInDTO) {
+  signIn(@Body() signInDto: CredentialsDTO) {
     return this.authService.signIn(signInDto.username, signInDto.password);
+  }
+
+  @Post("signup")
+  signUp(@Body() signUpDTO: CredentialsDTO) {
+    return this.authService.signUp(signUpDTO.username, signUpDTO.password);
   }
 }
