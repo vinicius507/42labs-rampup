@@ -1,6 +1,6 @@
-import { ConflictException, Injectable } from "@nestjs/common";
-import { User } from "./user.interface";
+import { Injectable } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
+import { User } from "./user.interface";
 
 @Injectable()
 export class UsersService {
@@ -25,14 +25,6 @@ export class UsersService {
     username: string,
     hashedPassword: string
   ): Promise<Omit<User, "password">> {
-    const existingUser = await this.findOne(username);
-
-    if (existingUser) {
-      throw new ConflictException(
-        `User with username '${username}' already exists`
-      );
-    }
-
     const newUser = {
       id: randomUUID(),
       username,
