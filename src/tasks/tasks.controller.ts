@@ -9,12 +9,15 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
 } from "@nestjs/common";
 import type { UUID } from "node:crypto";
 import { TasksService } from "./tasks.service";
 import { CreateTaskDTO, TaskDTO, UpdateTaskDTO } from "./dto";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { AuthGuard } from "../auth/auth.guard";
 
+@UseGuards(AuthGuard)
 @ApiTags("tasks")
 @Controller("tasks")
 export class TasksController {
