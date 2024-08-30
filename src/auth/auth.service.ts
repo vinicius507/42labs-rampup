@@ -17,6 +17,11 @@ export class AuthService {
 
   async signIn(username: string, password: string) {
     const user = await this.usersService.findOne(username);
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
     const passwordMatch = await this.hashService.compare(
       password,
       user.password
