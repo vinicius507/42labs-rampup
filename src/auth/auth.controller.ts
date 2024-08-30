@@ -23,6 +23,14 @@ export class AuthController {
     return this.authService.signIn(signInDto.username, signInDto.password);
   }
 
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: "User successfully signed up.",
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: "Username already taken.",
+  })
   @Post("signup")
   signUp(@Body() signUpDTO: CredentialsDTO) {
     return this.authService.signUp(signUpDTO.username, signUpDTO.password);
