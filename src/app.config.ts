@@ -1,13 +1,13 @@
-import * as fs from "fs";
 import { plainToInstance, Type } from "class-transformer";
 import {
   IsPort,
   IsString,
   IsStrongPassword,
-  validateSync,
-  ValidateNested,
   ValidateIf,
+  ValidateNested,
+  validateSync,
 } from "class-validator";
+import * as fs from "fs";
 
 class DbConfig {
   @IsString()

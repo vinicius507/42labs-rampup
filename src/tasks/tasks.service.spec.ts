@@ -1,10 +1,10 @@
 import { TestBed } from "@automock/jest";
+import { NotFoundException } from "@nestjs/common";
+import { getRepositoryToken } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { TasksService } from "./tasks.service";
 import { Task } from "./task.interface";
 import { TaskEntity } from "./tasks.entity";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import { NotFoundException } from "@nestjs/common";
+import { TasksService } from "./tasks.service";
 
 describe("TasksService", () => {
   let service: TasksService;

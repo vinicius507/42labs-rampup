@@ -1,5 +1,5 @@
 import { UUID } from "crypto";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { taskStatuses, type Task, type TaskStatus } from "./task.interface";
 
 @Entity({ name: "tasks" })

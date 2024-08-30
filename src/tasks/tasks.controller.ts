@@ -11,11 +11,11 @@ import {
   Put,
   UseGuards,
 } from "@nestjs/common";
-import type { UUID } from "node:crypto";
-import { TasksService } from "./tasks.service";
-import { CreateTaskDTO, TaskDTO, UpdateTaskDTO } from "./dto";
 import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
+import type { UUID } from "node:crypto";
 import { AuthGuard } from "../auth/auth.guard";
+import { CreateTaskDTO, TaskDTO, UpdateTaskDTO } from "./dto";
+import { TasksService } from "./tasks.service";
 
 @ApiBearerAuth()
 @ApiTags("tasks")

@@ -1,7 +1,7 @@
+import { TestBed } from "@automock/jest";
 import { ConflictException, UnauthorizedException } from "@nestjs/common";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
-import { TestBed } from "@automock/jest";
 
 describe("AuthController", () => {
   let controller: AuthController;

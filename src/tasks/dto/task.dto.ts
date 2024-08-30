@@ -1,6 +1,6 @@
 import { ApiResponseProperty } from "@nestjs/swagger";
-import { taskStatuses, TaskStatus } from "../task.interface";
 import { UUID } from "node:crypto";
+import { TaskStatus, taskStatuses } from "../task.interface";
 
 export class TaskDTO {
   @ApiResponseProperty({ type: "string", format: "uuid" })

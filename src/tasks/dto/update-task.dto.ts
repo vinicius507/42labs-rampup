@@ -1,6 +1,6 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsString, Length } from "class-validator";
 import { TaskStatus, taskStatuses } from "../task.interface";
-import { ApiProperty } from "@nestjs/swagger";
 
 export class UpdateTaskDTO {
   @ApiProperty({

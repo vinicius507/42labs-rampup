@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Task } from "./task.interface";
 import { InjectRepository } from "@nestjs/typeorm";
-import { TaskEntity } from "./tasks.entity";
-import { Repository } from "typeorm";
 import type { UUID } from "node:crypto";
+import { Repository } from "typeorm";
+import { Task } from "./task.interface";
+import { TaskEntity } from "./tasks.entity";
 
 @Injectable()
 export class TasksService {

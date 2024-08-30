@@ -1,9 +1,9 @@
+import { HttpStatus, ValidationPipe } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
-import { ConfigService } from "@nestjs/config";
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
-import { ValidationPipe, HttpStatus } from "@nestjs/common";
 
 function setupSwagger(app: NestExpressApplication) {
   const config = new DocumentBuilder()

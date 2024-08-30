@@ -1,8 +1,8 @@
-import { TasksController } from "./tasks.controller";
-import { TasksService } from "./tasks.service";
-import { Task } from "./task.interface";
 import { TestBed } from "@automock/jest";
 import { NotFoundException } from "@nestjs/common";
+import { Task } from "./task.interface";
+import { TasksController } from "./tasks.controller";
+import { TasksService } from "./tasks.service";
 
 describe("TasksController", () => {
   let controller: TasksController;

@@ -1,9 +1,9 @@
 import { TestBed } from "@automock/jest";
+import { ConflictException, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { HashService } from "../hash/hash.service";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "./auth.service";
-import { ConflictException, UnauthorizedException } from "@nestjs/common";
 
 describe("AuthService", () => {
   let service: AuthService;

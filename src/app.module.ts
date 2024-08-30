@@ -1,11 +1,11 @@
 import { Module } from "@nestjs/common";
-import { TasksModule } from "./tasks/tasks.module";
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { AuthModule } from "./auth/auth.module";
-import { UsersModule } from "./users/users.module";
-import { HashModule } from "./hash/hash.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import appConfig from "./app.config";
+import { AuthModule } from "./auth/auth.module";
+import { HashModule } from "./hash/hash.module";
+import { TasksModule } from "./tasks/tasks.module";
+import { UsersModule } from "./users/users.module";
 
 @Module({
   imports: [

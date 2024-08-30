@@ -1,8 +1,8 @@
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TasksModule } from "../src/tasks/tasks.module";
 import * as request from "supertest";
+import { TasksModule } from "../src/tasks/tasks.module";
 
 describe("TasksController (e2e)", () => {
   let app: INestApplication;
