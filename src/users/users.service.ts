@@ -1,38 +1,27 @@
 import { Injectable } from "@nestjs/common";
-import { randomUUID } from "node:crypto";
-import { User } from "./user.interface";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { UserEntity } from "./user.entity";
+import { ReadUser, User } from "./user.interface";
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [
-    {
-      id: "1fb52ba3-e7a1-470e-9f4c-55a7d9476da4",
-      username: "john",
-      password: "changeme",
-    },
-    {
-      id: "1e6574c3-bee4-4006-a11b-1d3911e9656c",
-      username: "maria",
-      password: "guess",
-    },
-  ];
+  constructor(
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>
+  ) {}
 
   async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
+    return this.usersRepository.findOneBy({ username });
   }
 
-  async create(
-    username: string,
-    hashedPassword: string
-  ): Promise<Omit<User, "password">> {
-    const newUser = {
-      id: randomUUID(),
+  async create(username: string, hashedPassword: string): Promise<ReadUser> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...user } = await this.usersRepository.save({
       username,
-    };
-    this.users.push({
-      ...newUser,
       password: hashedPassword,
     });
-    return newUser;
+
+    return user;
   }
 }
