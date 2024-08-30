@@ -1,19 +1,31 @@
 import { HttpStatus, INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm";
 import * as request from "supertest";
+import { Repository } from "typeorm";
 import { AuthModule } from "../src/auth/auth.module";
+import { TaskEntity } from "../src/tasks/tasks.entity";
 import { TasksModule } from "../src/tasks/tasks.module";
+import { UserEntity } from "../src/users/user.entity";
 
 describe("TasksController (e2e)", () => {
   let app: INestApplication;
+  let tasksRepository: Repository<TaskEntity>;
+  let usersRepository: Repository<UserEntity>;
 
-  const userPayload = { username: "test", password: "password" };
+  const userPayload = { username: "tasks-test", password: "password" };
 
   const expectedTask = {
     id: expect.any(String),
     title: "Test Task",
     status: "open",
+  };
+
+  const createUser = async () => {
+    await request(app.getHttpServer())
+      .post("/auth/signup")
+      .send(userPayload)
+      .expect(HttpStatus.CREATED);
   };
 
   const getAccessToken = async () => {
@@ -24,13 +36,15 @@ describe("TasksController (e2e)", () => {
       .then((res) => res.body.accessToken);
   };
 
-  const getTaskId = async () => {
+  const createTask = async () => {
     const accessToken = await getAccessToken();
-    const response = await request(app.getHttpServer())
-      .get("/tasks")
-      .set("Authorization", `Bearer ${accessToken}`);
 
-    return response.body[0].id;
+    return await request(app.getHttpServer())
+      .post("/tasks")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .send({ title: expectedTask.title })
+      .expect(HttpStatus.CREATED)
+      .then((res) => res.body.id);
   };
 
   beforeAll(async () => {
@@ -61,12 +75,16 @@ describe("TasksController (e2e)", () => {
         },
       })
     );
+    tasksRepository = app.get(getRepositoryToken(TaskEntity));
+    usersRepository = app.get(getRepositoryToken(UserEntity));
     await app.init();
+  });
 
-    await request(app.getHttpServer())
-      .post("/auth/signup")
-      .send({ username: "test", password: "password" })
-      .expect(HttpStatus.CREATED);
+  beforeEach(async () => {
+    await tasksRepository.createQueryBuilder().delete().execute();
+    await usersRepository.createQueryBuilder().delete().execute();
+
+    await createUser();
   });
 
   describe("POST /tasks", () => {
@@ -125,6 +143,8 @@ describe("TasksController (e2e)", () => {
   });
 
   describe("GET /tasks", () => {
+    beforeEach(createTask);
+
     it("should return an array of tasks", async () => {
       const accessToken = await getAccessToken();
 
@@ -144,8 +164,11 @@ describe("TasksController (e2e)", () => {
   });
 
   describe("PUT /tasks/:id", () => {
+    let taskId: string;
+
+    beforeEach(async () => (taskId = await createTask()));
+
     it("should update a task", async () => {
-      const taskId = await getTaskId();
       const accessToken = await getAccessToken();
 
       const response = await request(app.getHttpServer())
@@ -162,7 +185,6 @@ describe("TasksController (e2e)", () => {
     });
 
     it("should fail if field is missing", async () => {
-      const taskId = await getTaskId();
       const accessToken = await getAccessToken();
 
       const response = await request(app.getHttpServer())
@@ -174,7 +196,6 @@ describe("TasksController (e2e)", () => {
     });
 
     it("should fail if title is too short", async () => {
-      const taskId = await getTaskId();
       const accessToken = await getAccessToken();
 
       const response = await request(app.getHttpServer())
@@ -186,7 +207,6 @@ describe("TasksController (e2e)", () => {
     });
 
     it("should fail if title is too long", async () => {
-      const taskId = await getTaskId();
       const accessToken = await getAccessToken();
 
       const response = await request(app.getHttpServer())
@@ -198,7 +218,6 @@ describe("TasksController (e2e)", () => {
     });
 
     it("should fail if status is not valid", async () => {
-      const taskId = await getTaskId();
       const accessToken = await getAccessToken();
 
       const response = await request(app.getHttpServer())
@@ -210,8 +229,6 @@ describe("TasksController (e2e)", () => {
     });
 
     it("should fail if unauthorized", async () => {
-      const taskId = await getTaskId();
-
       const response = await request(app.getHttpServer())
         .put(`/tasks/${taskId}`)
         .send({ title: "Updated Task", status: "done" });
@@ -221,8 +238,11 @@ describe("TasksController (e2e)", () => {
   });
 
   describe("DELETE /tasks/:id", () => {
+    let taskId: string;
+
+    beforeEach(async () => (taskId = await createTask()));
+
     it("should delete a task", async () => {
-      const taskId = await getTaskId();
       const accessToken = await getAccessToken();
 
       const response = await request(app.getHttpServer())
@@ -233,8 +253,6 @@ describe("TasksController (e2e)", () => {
     });
 
     it("should fail if unauthorized", async () => {
-      const taskId = "1f1b1b1b-1b1b-1b1b-1b1b-1b1b1b1b1b1b";
-
       const response = await request(app.getHttpServer()).delete(
         `/tasks/${taskId}`
       );
