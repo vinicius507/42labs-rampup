@@ -71,7 +71,7 @@ export class TasksController {
   }
 
   @ApiResponse({
-    status: HttpStatus.OK,
+    status: HttpStatus.NO_CONTENT,
     description: "Task deleted successfully.",
   })
   @ApiResponse({
