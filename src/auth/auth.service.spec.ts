@@ -42,7 +42,16 @@ describe("AuthService", () => {
     expect(accessToken).toEqual(expectedAccessToken);
   });
 
-  it("should throw an error when login fails", async () => {
+  it("should throw an error when user is not found", async () => {
+    const user = { username: "user", password: "password" };
+    usersService.findOne.mockImplementationOnce(async () => undefined);
+
+    const promise = service.signIn(user.username, user.password);
+
+    await expect(promise).rejects.toThrow(UnauthorizedException);
+  });
+
+  it("should throw an error when password mismatches", async () => {
     const user = { username: "user", password: "password" };
     hashService.compare.mockImplementationOnce(async () => false);
     usersService.findOne.mockImplementationOnce(async (username) => ({
