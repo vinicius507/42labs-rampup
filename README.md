@@ -8,10 +8,9 @@
     <img src="https://github.com/vinicius507/42labs-rampup/blob/main/resources/repo/42-labs-logo.png" alt="Logo" width="150" height="150">
 
   <p align="center">
-    A simple to-do app written in Javascriptm using the NestJS framework. Developed as the ramp up project for the Soulloop Labs.
+    <img src="https://github.com/vinicius507/42labs-rampup/actions/workflows/main.yml/badge.svg?branch=main" alt="CI Status"/>
     <br/>
-    <img src="https://img.shields.io/badge/Testing%20Coverage-100%25-brightgreen"/>
-    <img src="https://img.shields.io/badge/Docker%20Build-passed-blue"/>
+    A simple to-do app written in Javascriptm using the NestJS framework. Developed as the ramp up project for the Soulloop Labs.
   </p>
 </p>
 
