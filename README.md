@@ -5,7 +5,8 @@
 <!-- PROJECT SHIELDS -->
 <br/>
 <p align="center">
-    <img src="https://github.com/vinicius507/42labs-rampup/blob/main/resources/repo/42-labs-logo.png" alt="Logo" width="150" height="150">
+    <img src="./resources/repo/42-labs-logo.png" alt="Logo" width="150">
+    <img src="./resources/repo/soulloop-logo.png" alt="Logo" width="150">
 
   <p align="center">
     <img src="https://github.com/vinicius507/42labs-rampup/actions/workflows/main.yml/badge.svg?branch=main" alt="CI Status"/>
