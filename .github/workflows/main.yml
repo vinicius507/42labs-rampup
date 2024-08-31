@@ -13,8 +13,10 @@ jobs:
     uses: ./.github/workflows/build.yml
   tests:
     uses: ./.github/workflows/tests.yml
+    needs: [build]
   docker:
     uses: ./.github/workflows/docker.yml
+    needs: [tests]
     with:
       push: ${{ github.event_name != 'pull_request' }}
       username: ${{ vars.DOCKERHUB_USERNAME }}
